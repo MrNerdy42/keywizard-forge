@@ -1,0 +1,4 @@
+# Keyboard-Wizard
+
+THIS REPO IS NO LONGER UNDER ACIVE DEVELOMENT.
+ALL DEVELOPMENT WILL BE DONE ON https://github.com/MrNerdy42/keywizard-fabric AND THEN PORTED HERE.

@@ -1,0 +1,55 @@
+# This is an example mods.toml file. It contains the data relating to the loading mods.
+# There are several mandatory fields (), and many more that are optional (#optional).
+# The overall format is standard TOML format, v0.5.0.
+# Note that there are a couple of TOML lists in this file.
+# Find more information on toml format here:  https://github.com/toml-lang/toml
+# The name of the mod loader type to load - for regular FML @Mod mods it should be javafml
+modLoader="javafml" 
+loaderVersion="[36,)"
+license="MIT License"
+
+# A URL to refer people to when problems occur with this mod
+#issueTrackerURL="https://github.com/MrNerdy42/keywizard/issues"
+
+# A list of mods - how many allowed here is determined by the individual mod loader
+[[mods]] 
+# The modid of the mod
+modId="keywizard" 
+version="${version}" 
+displayName="Keyboard Wizard" 
+
+# A URL to query for updates for this mod. See the JSON update specification https://mcforge.readthedocs.io/en/latest/gettingstarted/autoupdate/
+#updateJSONURL="https://change.me.example.invalid/updates.json" #optional
+
+# A URL for the "homepage" for this mod, displayed in the mod UI
+displayURL="https://www.curseforge.com/minecraft/mc-mods/keyboard-wizard" #optional
+
+# A file name (in the root of the mod JAR) containing a logo for display
+#logoFile="examplemod.png" #optional
+
+# A text field displayed in the mod UI
+credits="_Bedrock_Miner_ for his Forge tutorials." #optional
+
+# A text field displayed in the mod UI
+authors="MrNerdy42"
+
+# The description text for the mod (multi line!) ()
+description='''
+Keyboard Wizard is simple that makes finding and fixing key bind conflicts a lot easier.
+'''
+
+[[dependencies.keywizard]]
+modId = "forge"
+mandatory = true # do you **need** this mod to be able to launch?
+# A version range using interval notation.
+# Brackets mean "inclusive" bounds, while parentheses mean "exclusive".
+versionRange = "[36,)" # This essentially means any forge >= 36
+ordering = "NONE" # Use this if you want your mod to be loaded specifically BEFORE or AFTER another mod
+side = "BOTH" # Specify where this mod is required: can be BOTH, CLIENT or SERVER
+
+[[dependencies.keywizard]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.16.5,1.17)"
+ordering = "NONE"
+side = "BOTH"
