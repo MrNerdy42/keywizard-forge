@@ -1,22 +1,29 @@
 package mrnerdy42.keywizard.gui;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import com.mojang.blaze3d.systems.RenderSystem;
 
 import mrnerdy42.keywizard.util.DrawingUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.AbstractParentElement;
 import net.minecraft.client.gui.Drawable;
+import net.minecraft.client.gui.screen.TickableElement;
 import net.minecraft.client.gui.widget.PressableWidget;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import net.minecraft.text.TextColor;
+import net.minecraft.text.TranslatableText;
 
-public class KeyboardWidget extends AbstractParentElement implements Drawable {
+public class KeyboardWidget extends AbstractParentElement implements Drawable, TickableElement {
 	public KeyWizardScreen keyWizardScreen;
 	
 	private HashMap<Integer, KeyboardKeyWidget> keys = new HashMap<>();
@@ -30,14 +37,21 @@ public class KeyboardWidget extends AbstractParentElement implements Drawable {
 	}
 	
 	public float addKey(float relativeX, float relativeY, float width, float height, float keySpacing, int keyCode) {
-		this.keys.put(keyCode, new KeyboardKeyWidget(this, keyCode, this.anchorX + relativeX, this.anchorY + relativeY, width, height));
+		this.keys.put(keyCode, new KeyboardKeyWidget(keyCode, this.anchorX + relativeX, this.anchorY + relativeY, width, height));
 		return relativeX + width + keySpacing;
 	}
 	
 	@Override
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-		for (KeyboardKeyWidget k : this.children()) {
+		List<? extends KeyboardKeyWidget> keys = this.children();
+		for (KeyboardKeyWidget k : keys) {
 			k.render(matrices, mouseX, mouseY, delta);
+		}
+		
+		for (KeyboardKeyWidget k : keys) {
+		    if (k.active && k.isHovered()) {
+		        keyWizardScreen.renderTooltip(matrices, k.tooltipText, mouseX, mouseY);
+		    }
 		}
 	}
 	
@@ -56,7 +70,15 @@ public class KeyboardWidget extends AbstractParentElement implements Drawable {
 		return new ArrayList<KeyboardKeyWidget>(this.keys.values());
 	}
 	
-	public class KeyboardKeyWidget extends PressableWidget{	
+
+	@Override
+	public void tick() {
+		for (KeyboardKeyWidget k : this.children()) {
+			k.tick();
+		}
+	}
+	
+	public class KeyboardKeyWidget extends PressableWidget implements TickableElement {	
 		public float x;
 		public float y;
 		
@@ -64,22 +86,22 @@ public class KeyboardWidget extends AbstractParentElement implements Drawable {
 		protected float height;
 		
 		private InputUtil.Key key;
-		private KeyboardWidget keyboard;
+		private ArrayList<KeyBinding> bindings = new ArrayList<KeyBinding>();
+		private List<Text> tooltipText = new ArrayList<Text>();
 		
-		protected KeyboardKeyWidget(KeyboardWidget keyboard, int keyCode, float x, float y, float width, float height) {
+		protected KeyboardKeyWidget(int keyCode, float x, float y, float width, float height) {
 			super((int) x, (int) y, (int) width, (int) height, Text.of(""));
 			this.x = x;
 			this.y = y;
 			this.width = width;
 			this.height = height;
-			this.keyboard = keyboard;
 			this.key = InputUtil.Type.KEYSYM.createFromCode(keyCode);
 			this.setMessage(this.key.getLocalizedText());
 		}
 		
 		@Override
 		public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-			int bindings = this.getBindings().length;
+			int bindings = this.bindings.size();
 			int color = 0;
 			if (this.active) {
 				if (this.isHovered()) {
@@ -112,7 +134,8 @@ public class KeyboardWidget extends AbstractParentElement implements Drawable {
 			KeyBinding.updateKeysByCode();
 		}
 		
-		public KeyBinding[] getBindings() {
+		@SuppressWarnings("resource")
+		private void updateBindings() {
 			ArrayList<KeyBinding> bound = new ArrayList<>();
 			
 			for (KeyBinding k : MinecraftClient.getInstance().options.keysAll) {
@@ -121,8 +144,22 @@ public class KeyboardWidget extends AbstractParentElement implements Drawable {
 				}
 			}
 			
-			
-			return bound.toArray(new KeyBinding[bound.size()]);
+			this.bindings = bound;
+		}
+		
+		private void updateTooltip() {
+			//Style test = Style.EMPTY.withColor(TextColor.fromRgb(0x555555));
+			ArrayList<MutableText> tooltipText = new ArrayList<>();
+			for (KeyBinding b : this.bindings) {
+				tooltipText.add( new TranslatableText(b.getTranslationKey()) );/*.append(new TranslatableText(" (this is a test)").setStyle(test)));*/
+			}	
+			this.tooltipText = tooltipText.stream().sorted((a, b) -> a.asString().compareTo(b.asString())).collect(Collectors.toList());
+		}
+
+		@Override
+		public void tick() {
+			updateBindings();
+			updateTooltip();
 		}
 		
 

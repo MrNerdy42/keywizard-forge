@@ -1,6 +1,6 @@
 package mrnerdy42.keywizard.mixin;
 
-import mrnerdy42.keywizard.forge.KeyWizard;
+import mrnerdy42.keywizard.KeyWizard;
 import net.minecraft.client.gui.screen.option.ControlsOptionsScreen;
 
 import org.spongepowered.asm.mixin.Mixin;
