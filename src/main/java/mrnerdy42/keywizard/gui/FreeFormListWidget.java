@@ -10,6 +10,7 @@ import net.minecraft.client.gui.widget.EntryListWidget;
 import net.minecraft.client.util.math.MatrixStack;
 
 public abstract class FreeFormListWidget<E extends FreeFormListWidget<E>.Entry> extends EntryListWidget<FreeFormListWidget<E>.Entry> {
+	public boolean visible = true;
 
 	public FreeFormListWidget(MinecraftClient client, int top, int left, int width, int height, int itemHeight) {
 		super(client, 0, 0, 0, 0, itemHeight);
@@ -23,8 +24,6 @@ public abstract class FreeFormListWidget<E extends FreeFormListWidget<E>.Entry> 
 
 		this.method_31322(false);
 		this.method_31323(false);
-
-		//this.setSelected(this.children().get(0));
 	}
 
 	@Override
@@ -62,13 +61,57 @@ public abstract class FreeFormListWidget<E extends FreeFormListWidget<E>.Entry> 
 
 	@Override
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-		this.renderBackground(matrices);
-		super.render(matrices, mouseX, mouseY, delta);
+		if (this.visible) {
+			this.renderBackground(matrices);
+			super.render(matrices, mouseX, mouseY, delta);
+		}
 	}
 
 	@Override
 	protected boolean isFocused() {
 		return true;
+	}
+	
+	@Override
+	public boolean mouseClicked(double mouseX, double mouseY, int button) {
+		return this.visible && super.mouseClicked(mouseX, mouseY, button);
+	}
+	
+	@Override
+	public boolean mouseReleased(double mouseX, double mouseY, int button) {
+		return this.visible && super.mouseReleased(mouseX, mouseY, button);
+
+	}
+	
+	@Override
+	public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
+		return this.visible && super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
+	}
+	
+	@Override
+	public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
+		return this.visible && super.mouseScrolled(mouseX, mouseY, amount);
+	}
+	
+	@Override
+	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+		return this.visible && super.keyPressed(keyCode, scanCode, modifiers);
+	}
+	
+	@Override
+	public boolean keyReleased(int keyCode, int scanCode, int modifiers) {
+		return this.visible && super.keyReleased(keyCode, scanCode, modifiers);
+
+	}
+	
+	@Override
+	public boolean charTyped(char chr, int modifiers) {
+		return this.visible && super.charTyped(chr, modifiers);
+	}
+	
+	@Override
+	public boolean isMouseOver(double mouseX, double mouseY) {
+		return this.visible && super.isMouseOver(mouseX, mouseY);
 	}
 	
 	public abstract class Entry extends EntryListWidget.Entry<FreeFormListWidget<E>.Entry>{
@@ -80,9 +123,9 @@ public abstract class FreeFormListWidget<E extends FreeFormListWidget<E>.Entry> 
 			if (button == 0) {
 				this.onPressed();
 				return true;
-			} else {
-				return false;
 			}
+				
+			return false;
 		}
 		
 		private void onPressed() {

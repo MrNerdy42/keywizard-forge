@@ -1,14 +1,25 @@
 package mrnerdy42.keywizard.gui;
 
+import java.util.Arrays;
+
+import org.jetbrains.annotations.Nullable;
+
+import mrnerdy42.keywizard.util.KeyBindingUtil;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.TickableElement;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.TranslatableText;
 
-public class KeyBindingListWidget extends FreeFormListWidget<KeyBindingListWidget.BindingEntry> /*t<KeyBindingListWidget.BindingEntry>*/ {
+public class KeyBindingListWidget extends FreeFormListWidget<KeyBindingListWidget.BindingEntry> implements TickableElement {
+	
+	public KeyWizardScreen keyWizardScreen;
+	private String searchText = "";
+	private String category = KeyBindingUtil.DYNAMIC_CATEGORY_ALL;
 
-	public KeyBindingListWidget(MinecraftClient client, int top, int left, int width, int height, int itemHeight) {
-		super(client, top, left, width, height, itemHeight);
+	public KeyBindingListWidget(KeyWizardScreen keyWizardScreen, int top, int left, int width, int height, int itemHeight) {
+		super(MinecraftClient.getInstance(), top, left, width, height, itemHeight);
+		this.keyWizardScreen = keyWizardScreen;
 		
 		for (KeyBinding k : this.client.options.keysAll) {
 			this.addEntry(new BindingEntry(k));
@@ -16,36 +27,61 @@ public class KeyBindingListWidget extends FreeFormListWidget<KeyBindingListWidge
 		this.setSelected(this.children().get(0));
 	}
 	
+	@Nullable
 	public KeyBinding getSelectedKeyBinding() {
+		if (this.getSelected() == null) {
+			return null;
+		}
 		return ((BindingEntry)this.getSelected()).keyBinding;
 	}
-
-	/*
-	@Override
-	protected void renderList(MatrixStack matrices, int x, int y, int mouseX, int mouseY, float delta) {
-		double scaleH = this.client.getWindow().getHeight() / (double) this.client.getWindow().getScaledHeight();
-		double scaleW = this.client.getWindow().getWidth() / (double) this.client.getWindow().getScaledWidth();
-		RenderSystem.enableScissor((int)(this.left * scaleW), (int)(this.client.getWindow().getHeight() - (this.bottom * scaleH)), (int)(this.width * scaleW), (int)(this.height * scaleH));
-
-		for (int i = 0; i < this.getEntryCount(); ++i) {
-			if (this.isSelectedEntry(i)) {
-				DrawingUtil.drawNoFillRect(matrices, this.getRowLeft()-2, this.getRowTop(i) -2, this.getRowRight() - 8, this.getRowTop(i) + this.itemHeight - 4, 0xFFFFFFFF);
+	
+	private void updateList() {
+		if (!this.searchText.equals(this.keyWizardScreen.getSearchText()) || !this.category.equals(this.keyWizardScreen.getSelectedCategory())) {
+			this.category = this.keyWizardScreen.getSelectedCategory();
+			KeyBinding[] bindings = getBindingsByCategory(this.category);
+			if (!this.searchText.equals(this.keyWizardScreen.getSearchText())) {
+				//String[] words = this.searchText.split("\\s+");
 			}
-			
-			BindingEntry entry = (BindingEntry) getEntry(i);
-			//this.itemHeight - 4??
-			entry.render(matrices, i, this.getRowTop(i), this.getRowLeft(), this.getRowWidth(), this.itemHeight-4, mouseX, mouseY, this.isMouseOver((double) mouseX, (double) mouseY) && Objects.equals(this.getEntryAtPosition((double) mouseX, (double) mouseY), entry), delta);
+			this.children().clear();
+			if (bindings.length > 0) {
+				for (KeyBinding k : bindings) {
+					this.addEntry(new BindingEntry(k));
+				}
+				this.setSelected(this.children().get(0));
+			} else {
+				this.setSelected(null);
+			}
 		}
-		RenderSystem.disableScissor();
 	}
-	*/
-
+	
+	private KeyBinding[] getBindingsByCategory(String category) {
+		KeyBinding[] bindings = Arrays.copyOf(this.client.options.keysAll, this.client.options.keysAll.length);
+		switch (category) {
+		case KeyBindingUtil.DYNAMIC_CATEGORY_ALL:
+		    return bindings;
+		case KeyBindingUtil.DYNAMIC_CATEGORY_CONFLICTS:
+			return bindings;
+		case KeyBindingUtil.DYNAMIC_CATEGORY_UNBOUND:
+			return Arrays.stream(bindings).filter(b -> b.isUnbound()).toArray(KeyBinding[]::new);
+		default:
+			return Arrays.stream(bindings).filter(b -> b.getCategory() == category).toArray(KeyBinding[]::new);
+		}
+	}
+	
+	private KeyBinding[] filterBindingsByName(KeyBinding[] bindings, String[] words){
+		return null;
+	}
+	
+	private KeyBinding[] filterBindingsByKey(KeyBinding[] bindings, String keyName) {
+		return null;
+	}
+	
 	@Override
-	protected boolean isFocused() {
-		return true;
+	public void tick() {
+		updateList();
 	}
 
-	public class BindingEntry extends FreeFormListWidget<KeyBindingListWidget.BindingEntry>.Entry /*EntryListWidget.Entry<KeyBindingListWidget.BindingEntry>*/ {
+	public class BindingEntry extends FreeFormListWidget<KeyBindingListWidget.BindingEntry>.Entry{
 
 		private final KeyBinding keyBinding;
 
@@ -61,4 +97,6 @@ public class KeyBindingListWidget extends FreeFormListWidget<KeyBindingListWidge
 		}
 
 	}
+	
+
 }

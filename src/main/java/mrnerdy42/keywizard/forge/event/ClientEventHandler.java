@@ -3,7 +3,6 @@ package mrnerdy42.keywizard.forge.event;
 import mrnerdy42.keywizard.forge.KeyWizard;
 import mrnerdy42.keywizard.gui.KeyWizardScreen;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.Text;
 import net.minecraftforge.client.event.InputEvent.KeyInputEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -15,7 +14,7 @@ public class ClientEventHandler {
     public void keyPressed(KeyInputEvent e) {
         if (KeyWizard.keyOpenKeyWizard.isPressed()) {
             MinecraftClient client = MinecraftClient.getInstance();
-            client.openScreen(new KeyWizardScreen(client.currentScreen, client.options, Text.of(KeyWizard.MODID)));
+            client.openScreen(new KeyWizardScreen(client.currentScreen));
         }
     }
 
