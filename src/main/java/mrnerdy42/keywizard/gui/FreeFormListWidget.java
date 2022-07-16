@@ -133,3 +133,4 @@ public abstract class FreeFormListWidget<E extends FreeFormListWidget<E>.Entry> 
 		}
 	}
 }
+

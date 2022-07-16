@@ -38,3 +38,4 @@ public class KeyWizard {
     	MinecraftForge.EVENT_BUS.register(new ClientEventHandler());
     }
 }
+
