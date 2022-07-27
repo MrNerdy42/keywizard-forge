@@ -71,4 +71,3 @@ public class DrawingUtil {
 		drawVerticalLine(matrices, right, top, bottom, color);
 	}
 }
-
