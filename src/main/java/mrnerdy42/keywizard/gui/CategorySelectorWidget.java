@@ -97,3 +97,4 @@ public class CategorySelectorWidget extends PressableWidget implements TickableE
 	}
 	
 }
+

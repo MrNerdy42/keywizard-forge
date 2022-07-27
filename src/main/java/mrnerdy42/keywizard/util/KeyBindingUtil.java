@@ -41,3 +41,4 @@ public class KeyBindingUtil {
 		return Collections.unmodifiableMap(map);
 	}
 }
+
