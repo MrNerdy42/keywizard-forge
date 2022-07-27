@@ -7,6 +7,8 @@ git fetch fabric-origin master
 If ($LASTEXITCODE -ne 0) {Exit}
 git checkout FETCH_HEAD src
 If ($LASTEXITCODE -ne 0) {Exit}
+git add .
+If ($LASTEXITCODE -ne 0) {Exit}
 
 If (Test-Path '.\src\main\java\mrnerdy42\keywizard\KeyWizard.java') {
     Remove-Item -Path '.\src\main\java\mrnerdy42\keywizard\KeyWizard.java' -Force
