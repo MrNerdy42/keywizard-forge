@@ -45,11 +45,11 @@ mandatory = true # do you **need** this mod to be able to launch?
 # Brackets mean "inclusive" bounds, while parentheses mean "exclusive".
 versionRange = "[36,)" # This essentially means any forge >= 36
 ordering = "NONE" # Use this if you want your mod to be loaded specifically BEFORE or AFTER another mod
-side = "BOTH" # Specify where this mod is required: can be BOTH, CLIENT or SERVER
+side = "CLIENT" # Specify where this mod is required: can be BOTH, CLIENT or SERVER
 
 [[dependencies.keywizard]]
 modId = "minecraft"
 mandatory = true
 versionRange = "[1.16.5,1.17)"
 ordering = "NONE"
-side = "BOTH"
+side = "CLIENT"
