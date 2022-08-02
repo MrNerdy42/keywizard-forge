@@ -70,6 +70,7 @@ dependencies {
     // mojang's official mappings, or feel free
     // to add your own mappings here (how about
     // mojmap layered with parchment, for example?)
+    // perhpas also mappings loom.officialMojangMappings()
     //mappings minecraft.officialMojangMappings()
 
     // uncomment this if you want to use yarn mappings
@@ -125,7 +126,7 @@ jar {
                 "Specification-Vendor"    : project.mod_author,
                 "Specification-Version"   : "1",
                 "Implementation-Title"    : project.name,
-                "Implementation-Version"  : version,
+                "Implementation-Version"  : project.jar.archiveVersion,
                 "Implementation-Vendor"   : project.mod_author,
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
