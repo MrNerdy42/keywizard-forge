@@ -5,7 +5,7 @@
 # Find more information on toml format here:  https://github.com/toml-lang/toml
 # The name of the mod loader type to load - for regular FML @Mod mods it should be javafml
 modLoader="javafml" 
-loaderVersion="[36,)"
+loaderVersion="[28,)"
 license="MIT License"
 
 # A URL to refer people to when problems occur with this mod
@@ -43,13 +43,13 @@ modId = "forge"
 mandatory = true # do you **need** this mod to be able to launch?
 # A version range using interval notation.
 # Brackets mean "inclusive" bounds, while parentheses mean "exclusive".
-versionRange = "[36,)" # This essentially means any forge >= 36
+versionRange = "[28,)" # This essentially means any forge >= 36
 ordering = "NONE" # Use this if you want your mod to be loaded specifically BEFORE or AFTER another mod
 side = "CLIENT" # Specify where this mod is required: can be BOTH, CLIENT or SERVER
 
 [[dependencies.keywizard]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[1.16.5,1.17)"
+versionRange = "[1.14,1.15)"
 ordering = "NONE"
 side = "CLIENT"
