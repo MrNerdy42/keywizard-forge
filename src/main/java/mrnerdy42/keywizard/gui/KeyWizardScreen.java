@@ -3,7 +3,7 @@ package mrnerdy42.keywizard.gui;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
 
-import mrnerdy42.keywizard.KeyWizard;
+import mrnerdy42.keywizard.forge.KeyWizard;
 import mrnerdy42.keywizard.util.KeyBindingUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.Drawable;
