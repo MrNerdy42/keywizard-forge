@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import mrnerdy42.keywizard.KeyWizard;
+import mrnerdy42.keywizard.forge.KeyWizard;
 import mrnerdy42.keywizard.gui.KeyWizardScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.options.ControlsOptionsScreen;
