@@ -91,7 +91,8 @@ dependencies {
     // additional dependencies can be specified using loom's regular format
     // specifying a "mod" dependency (like modImplementation or modApi)
     // will cause loom to remap the file to your specified mappings
-    mixin "net.fabricmc:sponge-mixin:0.11.4+mixin.0.8.5"
+    mixin "org.spongepowered:mixin:0.8.5"
+    //mixin "org.spongepowered:mixin:0.8.5:processor'"
 }
 
 processResources {
