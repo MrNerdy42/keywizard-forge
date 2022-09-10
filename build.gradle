@@ -1,7 +1,7 @@
 plugins {
     id "dev.architectury.loom" version "0.12.0-SNAPSHOT"
     id "maven-publish"
-    id "com.github.johnrengelman.shadow" version "7.1.2"
+    //id "com.github.johnrengelman.shadow" version "7.1.2"
 }
 
 //sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
@@ -96,8 +96,9 @@ dependencies {
     // additional dependencies can be specified using loom's regular format
     // specifying a "mod" dependency (like modImplementation or modApi)
     // will cause loom to remap the file to your specified mappings
-    //mixin "org.spongepowered:mixin:0.8.5"
+    mixin "org.spongepowered:mixin:0.8.5" //both makes gradle able to run the mod. Only the processor makes forge able to run but it won't load the mixin.
     mixin "org.spongepowered:mixin:0.8.5:processor"
+    //mixinAnnotationProcessor "org.spongepowered:mixin:0.8.5:processor"
 }
 
 processResources {
@@ -158,10 +159,16 @@ jar {
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
-}
+    duplicatesStrategy = 'exclude'
 
-shadowJar {
-    configurations = [project.configurations.mixin]
+    configurations.mixin.each { dep ->
+        from(project.zipTree(dep)){
+            exclude 'META-INF', 'META-INF/**'
+        }
+        from(project.zipTree(dep)){
+            include 'META-INF/services', 'META-INF/services/**'
+        }
+    }
 }
 
 // configure the maven publication
