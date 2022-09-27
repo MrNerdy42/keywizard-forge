@@ -61,6 +61,7 @@ repositories {
     // See https://docs.gradle.org/current/userguide/declaring_repositories.html
     // for more information about repositories.
     maven {
+        name 'Sponge'
         url 'https://repo.spongepowered.org/repository/maven-public'
     }
 }
@@ -68,11 +69,9 @@ repositories {
 
 configurations {
     mixin
-    mixinAnnotationProcessor
 
     compileClasspath.extendsFrom(mixin)
     runtimeClasspath.extendsFrom(mixin)
-    annotationProcessor.extendsFrom(mixinAnnotationProcessor)
 }
 
 dependencies {
@@ -96,9 +95,11 @@ dependencies {
     // additional dependencies can be specified using loom's regular format
     // specifying a "mod" dependency (like modImplementation or modApi)
     // will cause loom to remap the file to your specified mappings
-    mixin "org.spongepowered:mixin:0.8.5" //both makes gradle able to run the mod. Only the processor makes forge able to run but it won't load the mixin.
-    mixin "org.spongepowered:mixin:0.8.5:processor"
-    //mixinAnnotationProcessor "org.spongepowered:mixin:0.8.5:processor"
+    mixin 'org.ow2.asm:asm-util:9.3'
+
+    mixin("org.spongepowered:mixin:0.8.5") {
+        transitive = false
+    }
 }
 
 processResources {
@@ -110,6 +111,13 @@ processResources {
     filesMatching("META-INF/mods.toml") {
         expand "version": project.version
     }
+}
+
+task listrepos {
+    doLast {
+        println "Repositories:"
+        project.repositories.each { println "Name: " + it.name + "; url: " + it.url }
+   }
 }
 
 tasks.withType(JavaCompile) {
@@ -156,7 +164,11 @@ jar {
                 "Implementation-Title"    : project.name,
                 "Implementation-Version"  : project.jar.archiveVersion,
                 "Implementation-Vendor"   : project.mod_author,
-                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+                "TweakClass": "org.spongepowered.asm.launch.MixinTweaker",
+                "TweakOrder": 0,
+                'FMLCorePluginContainsFMLMod': 'true',
+                "ForceLoadAsMod": true
         ])
     }
     duplicatesStrategy = 'exclude'
