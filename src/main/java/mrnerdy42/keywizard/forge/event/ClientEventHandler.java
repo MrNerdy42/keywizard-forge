@@ -14,7 +14,7 @@ public class ClientEventHandler {
     public void keyPressed(KeyInputEvent e) {
         if (KeyWizard.keyOpenKeyWizard.isPressed()) {
             MinecraftClient client = MinecraftClient.getInstance();
-            client.openScreen(new KeyWizardScreen(client.currentScreen));
+            client.setScreen(new KeyWizardScreen(client.currentScreen));
         }
     }
 
