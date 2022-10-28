@@ -1,9 +1,9 @@
 $ErrorActionPreference = 'Stop'
 $env:GIT_REDIRECT_STDERR = '2>&1'
 
-git checkout fabricMerge
+git checkout fabricMerge-1.17
 If ($LASTEXITCODE -ne 0) {Exit}
-git fetch fabric-origin master
+git fetch fabric-origin 1.17
 If ($LASTEXITCODE -ne 0) {Exit}
 git checkout FETCH_HEAD src
 If ($LASTEXITCODE -ne 0) {Exit}
