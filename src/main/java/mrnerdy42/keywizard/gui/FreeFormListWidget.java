@@ -22,8 +22,8 @@ public abstract class FreeFormListWidget<E extends FreeFormListWidget<E>.Entry> 
 		this.bottom = top + height;
 		this.right = left + width;
 
-		this.method_31322(false);
-		this.method_31323(false);
+		this.setRenderBackground(false);
+		this.setRenderHorizontalShadows(false);
 	}
 
 	@Override

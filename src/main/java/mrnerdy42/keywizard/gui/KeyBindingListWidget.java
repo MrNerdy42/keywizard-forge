@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 import mrnerdy42.keywizard.mixin.KeyBindingAccessor;
 import mrnerdy42.keywizard.util.KeyBindingUtil;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.TickableElement;
+import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.util.InputUtil;
@@ -28,7 +28,7 @@ public class KeyBindingListWidget extends FreeFormListWidget<KeyBindingListWidge
 		super(MinecraftClient.getInstance(), top, left, width, height, itemHeight);
 		this.keyWizardScreen = keyWizardScreen;
 		
-		for (KeyBinding k : this.client.options.keysAll) {
+		for (KeyBinding k : this.client.options.allKeys) {
 			this.addEntry(new BindingEntry(k));
 		}
 		this.setSelected(this.children().get(0));
@@ -36,10 +36,10 @@ public class KeyBindingListWidget extends FreeFormListWidget<KeyBindingListWidge
 	
 	@Nullable
 	public KeyBinding getSelectedKeyBinding() {
-		if (this.getSelected() == null) {
+		if (this.getSelectedOrNull() == null) {
 			return null;
 		}
-		return ((BindingEntry)this.getSelected()).keyBinding;
+		return ((BindingEntry)this.getSelectedOrNull()).keyBinding;
 	}
 	
 	private void updateList() {
@@ -118,7 +118,7 @@ public class KeyBindingListWidget extends FreeFormListWidget<KeyBindingListWidge
 	}
 	
 	private KeyBinding[] getBindingsByCategory(String category) {
-		KeyBinding[] bindings = Arrays.copyOf(this.client.options.keysAll, this.client.options.keysAll.length);
+		KeyBinding[] bindings = Arrays.copyOf(this.client.options.allKeys, this.client.options.allKeys.length);
 		switch (category) {
 		case KeyBindingUtil.DYNAMIC_CATEGORY_ALL:
 		    return bindings;
@@ -152,6 +152,12 @@ public class KeyBindingListWidget extends FreeFormListWidget<KeyBindingListWidge
 			client.textRenderer.drawWithShadow(matrices, this.keyBinding.getBoundKeyLocalizedText(), x, y + client.textRenderer.fontHeight + 5, color);
 		}
 
+	}
+
+	@Override
+	public void appendNarrations(NarrationMessageBuilder var1) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 
