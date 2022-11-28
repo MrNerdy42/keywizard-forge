@@ -11,6 +11,7 @@ version = project.mod_version
 group = project.maven_group
 
 loom {
+    //mixin.env.disableRefMap
     // use this if you are using the official mojang mappings
     // and want loom to stop warning you about their license
     silentMojangMappingsLicense()
@@ -65,7 +66,6 @@ repositories {
         url 'https://repo.spongepowered.org/repository/maven-public'
     }
 }
-
 
 configurations {
     mixin
